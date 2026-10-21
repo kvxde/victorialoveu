@@ -91,7 +91,7 @@ let started=false;
 function startGalaxy(){
   if(started){return}started=true;
   const cv=$('cv'),ctx=cv.getContext('2d');let W,H,dpr=Math.min(devicePixelRatio||1,2),cx,cy,R,fx0,fy0,fw,fh;
-  const N=innerWidth<600?7000:11000;
+  const N=innerWidth<600?12000:16000;
   const sprites=[];
   function mkSprites(){
     const fs=18;PHRASES.forEach((p,k)=>{sprites[k]=[];[0.22,0.4,0.6,0.8,1].forEach(a=>{
@@ -105,9 +105,9 @@ function startGalaxy(){
   const P=[],NB=innerWidth<600?150:204,nj=NB/12;
   for(let i=0;i<N;i++){
     if(i<NB){const arm=i%3,lane=(i/3|0)%4,step=(i/12|0),rr=0.1+0.9*(step+Math.random()*0.45)/nj;
-      P.push({big:1,k:(i*7)%PHRASES.length,r:rr,th:rr*4.8+arm*2.0944+(lane-1.5)*0.11*(1-0.4*rr),d:Math.random(),sc:0.58+Math.random()*0.06,fs:0.17+Math.random()*0.1,fx:0,fy:0,fa:1,g2:4,gl:(Math.random()-.5)})}
+      P.push({big:1,k:(i*7)%PHRASES.length,r:rr,th:rr*4.8+arm*2.0944+(lane-1.5)*0.11*(1-0.4*rr),d:Math.random(),sc:0.58+Math.random()*0.06,fs:0.095+Math.random()*0.05,fx:0,fy:0,fa:1,g2:4,gl:(Math.random()-.5)})}
     else{const arm=i%3,rr=Math.pow(Math.random(),0.7),g=(Math.random()+Math.random()+Math.random()-1.5)*0.16;
-      P.push({big:0,k:i%PHRASES.length,r:rr,th:rr*4.8+arm*2.0944+g*(1.0-rr*0.6),d:Math.random(),sc:0.17+Math.random()*0.1,fs:0.17+Math.random()*0.1,fx:0,fy:0,fa:1,g2:rr<0.3?3:rr<0.65?2:1,gl:(Math.random()-.5)})}}
+      P.push({big:0,k:i%PHRASES.length,r:rr,th:rr*4.8+arm*2.0944+g*(1.0-rr*0.6),d:Math.random(),sc:0.17+Math.random()*0.1,fs:0.095+Math.random()*0.05,fx:0,fy:0,fa:1,g2:rr<0.3?3:rr<0.65?2:1,gl:(Math.random()-.5)})}}
   let img=new Image(),gray=null,iw=360,ih=480;
   img.onload=()=>{const c=document.createElement('canvas');c.width=iw;c.height=ih;const g=c.getContext('2d');g.drawImage(img,0,0);gray=g.getImageData(0,0,iw,ih).data;placeFace()};img.src=PHOTO;
   function hal(i,b){let f=1,r=0;while(i>0){f/=b;r+=f*(i%b);i=Math.floor(i/b)}return r}
@@ -153,6 +153,7 @@ function startGalaxy(){
       let m=Math.min(1,Math.max(0,mix*1.5-p.d*0.5));m=ease(m);
       let x=gx+(p.fx-gx)*m,y=gy+(p.fy-gy)*m;
       x+=p.gl*70*gl;y+=p.gl*3*gl;
+      if(mix===0&&!p.big&&(i&1))continue;
       if(x<-70||x>W+70||y<-40||y>H+40)continue;
       const sp=sprites[p.k][m>0.5?p.fa:p.g2],sc=(p.sc*(1+(z6-1)*(1-m)))*(1-m)+p.fs*m,w=sp.width*sc/dpr,h=sp.height*sc/dpr;
       if(p.big&&m<0.98){let ang=Math.atan2(tilt*(s*Rz+r*c*4.8),c*Rz-r*s*4.8);if(ang>1.5708)ang-=3.14159;else if(ang<-1.5708)ang+=3.14159;
